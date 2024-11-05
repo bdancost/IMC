@@ -1,4 +1,5 @@
 const calcular = document.getElementById("calcular");
+let calculoRealizado = false; // Indica se cálculo foi feito
 
 function imc() {
   const nome = document.getElementById("name").value;
@@ -26,16 +27,18 @@ function imc() {
     }
 
     resultado.textContent = `${nome} seu IMC é ${valorIMC} e você esta ${classificacao}!`;
+    calculoRealizado = true; // Define como true, indicando que o cálculo foi realizado
   } else {
     resultado.textContent = "Preencha todos os campos!!!";
   }
 }
 
-function limpar() {
+function limparCampos() {
   document.getElementById("name").value = "";
   document.getElementById("altura").value = "";
   document.getElementById("peso").value = "";
   document.getElementById("resultado").textContent = "";
+  calculoRealizado = false; // Reseta a variável, indicando que o cálculo foi limpo
 }
 
 calcular.addEventListener("click", imc);
@@ -43,10 +46,14 @@ calcular.addEventListener("click", imc);
 // Adiciona a funcioanalidade de calcular com Enter e limpar com Space
 document.addEventListener("keydown", function (event) {
   if (event.key === "Enter") {
-    imc();
-  } else if (event.key === " ") {
     event.preventDefault();
-    limpar(); // Limpa os campos
+    imc();
+  }
+
+  // Evento para limpar os dados ao pressionar Esc, apenas se o cálculo foi feito
+  if (event.key === "Escape" && calculoRealizado) {
+    event.preventDefault(); // Previne qualquer outro comportamento padrão da tecla Esc
+    limparCampos();
   }
 });
 
@@ -54,7 +61,7 @@ document.addEventListener("keydown", function (event) {
 function exibirMensagemOrientacao() {
   const mensagem = document.createElement("p");
   mensagem.id = "mensagem-orientacao";
-  mensagem.textContent = "Pressione a tecla Space para limpar os dados.";
+  mensagem.textContent = "Pressione a tecla Esc para limpar os dados.";
   mensagem.style.color = "#555";
   mensagem.style.fontSize = "0.9em";
   mensagem.style.marginTop = "10px";
@@ -78,7 +85,7 @@ function adicionarFundo() {
   fundo.style.left = "0";
   fundo.style.width = "100vw";
   fundo.style.height = "100vh";
-  fundo.style.backgroundColor = "#f0f0f0"; // Cor de fundo desejada
+  fundo.style.backgroundColor = "#f0f0f0)"; // Cor de fundo desejada
   fundo.style.zIndex = "-1"; // Coloca o fundo atrás do conteúdo
 }
 
